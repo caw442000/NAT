@@ -1,174 +1,175 @@
-const CastedVotes = []
+const CastedVotes = [];
+let availableVotesLeft = 1
 
 const createCardDiv = (snack) => {
-  const voteID = `${snack.brand}${snack.id}`;
-  const card = document.createElement("div");
-  card.classList = "card";
+    const voteID = `${snack.brand}${snack.id}`;
+    const card = document.createElement("div");
+    card.classList = "card";
 
-  const cardBody = document.createElement("div");
-  cardBody.classList = "card-body card-shadow";
+    const cardBody = document.createElement("div");
+    cardBody.classList = "card-body card-shadow";
 
-  const cardTriangle = document.createElement("div");
-  cardTriangle.classList = "card-corner-triangle";
+    const cardTriangle = document.createElement("div");
+    cardTriangle.classList = "card-corner-triangle";
 
-  const cardTriangleText = document.createElement("p");
-  cardTriangleText.classList = `card-corner-triangle-text hdg hdg_5 ${voteID} `;
-  cardTriangleText.setAttribute("id", voteID);
+    const cardTriangleText = document.createElement("p");
+    cardTriangleText.classList = `card-corner-triangle-text hdg hdg_5 ${voteID} `;
+    cardTriangleText.setAttribute("id", voteID);
 
-  const cardText = document.createElement("div");
-  cardText.classList = "card-text";
+    const cardText = document.createElement("div");
+    cardText.classList = "card-text";
 
-  const cardTextProduct = document.createElement("h4");
-  cardTextProduct.classList = "hdg hdg_4";
+    const cardTextProduct = document.createElement("h4");
+    cardTextProduct.classList = "hdg hdg_4";
 
-  const cardTextBrand = document.createElement("p");
-  cardTextBrand.classList = "card-text-brand hdg";
+    const cardTextBrand = document.createElement("p");
+    cardTextBrand.classList = "card-text-brand hdg";
 
-  let node = document.createTextNode(snack.votes);
-  let nodeBrand = document.createTextNode(snack.brand);
-  let nodeProduct = document.createTextNode(snack.product);
+    let node = document.createTextNode(snack.votes);
+    let nodeBrand = document.createTextNode(snack.brand);
+    let nodeProduct = document.createTextNode(snack.product);
 
-  const cardImg = document.createElement("img");
-  cardImg.classList = "card-image";
-  console.log(snack.image);
-  cardImg.src = snack.image;
+    const cardImg = document.createElement("img");
+    cardImg.classList = "card-image";
+    console.log(snack.image);
+    cardImg.src = snack.image;
 
-  cardTextProduct.appendChild(nodeProduct);
-  cardTextBrand.appendChild(nodeBrand);
-  cardText.appendChild(cardTextProduct);
-  cardText.appendChild(cardTextBrand);
+    cardTextProduct.appendChild(nodeProduct);
+    cardTextBrand.appendChild(nodeBrand);
+    cardText.appendChild(cardTextProduct);
+    cardText.appendChild(cardTextBrand);
 
-  cardTriangle.appendChild(cardTriangleText);
-  cardTriangleText.appendChild(node);
-  cardBody.appendChild(cardTriangle);
-  cardBody.appendChild(cardImg);
-  card.appendChild(cardBody);
-  card.appendChild(cardText);
+    cardTriangle.appendChild(cardTriangleText);
+    cardTriangleText.appendChild(node);
+    cardBody.appendChild(cardTriangle);
+    cardBody.appendChild(cardImg);
+    card.appendChild(cardBody);
+    card.appendChild(cardText);
 
-  return card;
+    return card;
 };
 
 const appendSnacksToDOM = (snacks) => {
-  const snackSection = document.getElementsByClassName("stockedBanner");
+    const snackSection = document.getElementsByClassName("stockedBanner");
 
-  console.log(snackSection);
+    console.log(snackSection);
 
-  const cards = document.createElement("div");
-  cards.classList = "cards";
+    const cards = document.createElement("div");
+    cards.classList = "cards";
 
-  snackSection[0].appendChild(cards);
+    snackSection[0].appendChild(cards);
 
-  //iterate over all snacks
-  snacks.map((snack) => {
-    cards.appendChild(createCardDiv(snack));
-  });
+    //iterate over all snacks
+    snacks.map((snack) => {
+        cards.appendChild(createCardDiv(snack));
+    });
 };
 
 const appendVotingToDOM = () => {
-  const siteBody = document.getElementsByClassName("site-bd");
+    const siteBody = document.getElementsByClassName("site-bd");
 
-  console.log(siteBody);
+    console.log(siteBody);
 
-  const votingSection = document.createElement("div");
-  votingSection.classList = "voting-bd";
+    const votingSection = document.createElement("div");
+    votingSection.classList = "voting-bd";
 
-  siteBody[0].appendChild(votingSection);
+    siteBody[0].appendChild(votingSection);
 };
 
 const castVote = (id) => {
-  console.log("id passed", id);
+    console.log("id passed", id);
 
-  console.log("before", CastedVotes)
+    console.log("before", CastedVotes);
 
+    if (!CastedVotes.includes(`${id}`) && availableVotesLeft > 0) {
+        axios
+            .post(`http://localhost:3000/snacks/vote/${id}`, id, {
+                headers: {
+                    Authorization:
+                        "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
+                },
+            })
+            .then((res) => {
+                console.log("VoteCast", res);
 
-  if(!CastedVotes.includes(`${id}`)) {
+                const updateID = `${res.data.brand}${res.data.id}`;
+                let newVote = res.data.votes;
 
+                console.log("updateID", updateID);
 
+                updateVotes(updateID, newVote);
+                availableVotes();
+                CastedVotes.push(res.data.id);
 
-  
+                console.log("castedvotes", CastedVotes);
+            })
+            .catch((error) => console.error(error));
+    } else {
+        if (availableVotesLeft === 0) {
+            alert("You have voted 3 times already");
+        } else {
 
-  axios
-    .post(`http://localhost:3000/snacks/vote/${id}`, id, {
-      headers: {
-        Authorization: "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
-      },
-    })
-    .then((res) => {
-      console.log("VoteCast", res);
-
-      const updateID = `${res.data.brand}${res.data.id}`;
-      let newVote = res.data.votes;
-
-      console.log("updateID", updateID);
-
-      updateVotes(updateID, newVote);
-      availableVotes();
-      CastedVotes.push(res.data.id)
-
-      console.log("castedvotes", CastedVotes)
-    })
-    .catch((error) => console.error(error));
-
-  }
+            alert("You have already Cast your Vote For this item");
+        }
+    }
 };
 
 const updateVotes = (id, newVote) => {
-  stringID = id.toString();
+    stringID = id.toString();
 
-  console.log("id in updateVotes", id);
-  console.log("newVog=te", newVote);
+    console.log("id in updateVotes", id);
+    console.log("newVog=te", newVote);
 
-  const arrayClass = [...document.getElementsByClassName(stringID)];
+    const arrayClass = [...document.getElementsByClassName(stringID)];
 
-  console.log("array", arrayClass);
+    console.log("array", arrayClass);
 
-  arrayClass.forEach(function (ele, idx) {
-    ele.innerText = newVote;
-  });
-  console.log("newvotechange", newVote);
+    arrayClass.forEach(function (ele, idx) {
+        ele.innerText = newVote;
+    });
+    console.log("newvotechange", newVote);
 };
 
 const availableVotes = () => {
-  const arrayClass = [...document.getElementsByClassName("available-votes")];
+    const arrayClass = [...document.getElementsByClassName("available-votes")];
 
-  console.log("array of available votes", arrayClass);
+    console.log("array of available votes", arrayClass);
 
+    arrayClass.forEach(function (ele, idx) {
+        let temp = ele.innerText;
+        console.log("temp", temp);
 
-  arrayClass.forEach(function (ele, idx) {
-    let temp = ele.innerText;
-    console.log("temp", temp);
+        if (temp > 0) {
+            availableVotesLeft = temp - 1;
+            ele.innerText = availableVotesLeft;
 
-    if (temp > 0) {
-      ele.innerText = temp - 1;
-    }
-
-  });
-
-
-
+            console.log(availableVotesLeft)
+            
+        }
+    });
 };
 
 const getSnacks = () => {
-  axios
-    .get("http://localhost:3000/snacks", {
-      headers: {
-        Authorization: "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
-      },
-    })
-    .then((response) => {
-      const snacks = response.data;
+    axios
+        .get("http://localhost:3000/snacks", {
+            headers: {
+                Authorization: "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
+            },
+        })
+        .then((response) => {
+            const snacks = response.data;
 
-      votesorted = snacks.sort((a, b) => {
-        return b.votes - a.votes;
-      });
+            votesorted = snacks.sort((a, b) => {
+                return b.votes - a.votes;
+            });
 
-      console.log("vote", votesorted);
-      console.log(response.data);
-      // append to DOM
-      appendSnacksToDOM(votesorted);
-      // appendVotingToDOM()
-    })
-    .catch((error) => console.error(error));
+            console.log("vote", votesorted);
+            console.log(response.data);
+            // append to DOM
+            appendSnacksToDOM(votesorted);
+            // appendVotingToDOM()
+        })
+        .catch((error) => console.error(error));
 };
 
 getSnacks();

@@ -1,4 +1,6 @@
 const createCardDiv = (snack) => {
+
+  const voteID = `${snack.brand}${snack.id}`
   const card = document.createElement("div");
   card.classList = "card";
 
@@ -9,7 +11,8 @@ const createCardDiv = (snack) => {
   cardTriangle.classList = "card-corner-triangle";
 
   const cardTriangleText = document.createElement("p");
-  cardTriangleText.classList = "card-corner-triangle-text hdg hdg_5";
+  cardTriangleText.classList = `card-corner-triangle-text hdg hdg_5 ${voteID} `;
+  cardTriangleText.setAttribute("id", voteID )
 
   const cardText = document.createElement("div");
   cardText.classList = "card-text";
@@ -74,6 +77,52 @@ const appendVotingToDOM = () => {
 
 
 };
+
+const castVote = (id) => {
+  console.log("id passed", id)
+  strID = id.toString();
+
+  console.log("strID", strID)
+
+  axios
+    .post(`http://localhost:3000/snacks/vote/${id}`, id, {
+      headers: {
+        Authorization: "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
+      },
+    })
+    .then((res) => {
+      
+      console.log("VoteCast", res)
+
+      const updateID = `${res.data.brand}${res.data.id}`
+      const newVote = res.data.votes
+
+      console.log("updateID", updateID)
+
+      updateVotes(updateID, newVote )
+
+    })
+    .catch((error) => console.error(error));
+
+  
+}
+
+const updateVotes = (id, newVote) => {
+
+  stringID = id.toString()
+
+  console.log("id in updateVotes", id)
+  console.log("newVog=te", newVote)
+
+  const arrayClass =   [...document.getElementsByClassName(stringID)]
+
+  console.log("array", arrayClass)
+
+  arrayClass.forEach(function(ele, idx) {
+    ele.innerText = newVote;
+ })
+
+}
 
 
 

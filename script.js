@@ -100,7 +100,7 @@ const castVote = (id) => {
                 updateVotes(updateID, newVote);
                 availableVotes();
                 CastedVotes.push(res.data.id);
-
+                setCookie("votes", CastedVotes)
                 console.log("castedvotes", CastedVotes);
             })
             .catch((error) => console.error(error));
@@ -113,6 +113,15 @@ const castVote = (id) => {
         }
     }
 };
+
+function setCookie(cname,cvalue,exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
+   
+  }
 
 const updateVotes = (id, newVote) => {
     stringID = id.toString();

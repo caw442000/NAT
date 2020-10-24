@@ -1,5 +1,5 @@
 const CastedVotes = [];
-let availableVotesLeft = 1
+let availableVotesLeft = 1;
 
 const createCardDiv = (snack) => {
     const voteID = `${snack.brand}${snack.id}`;
@@ -50,18 +50,11 @@ const createCardDiv = (snack) => {
 };
 
 const appendSnacksToDOM = (snacks) => {
-    const snackSection = document.getElementsByClassName("stockedBanner");
-
-    console.log(snackSection);
-
-    const cards = document.createElement("div");
-    cards.classList = "cards";
-
-    snackSection[0].appendChild(cards);
+    const cards = document.getElementsByClassName("cards");
 
     //iterate over all snacks
     snacks.map((snack) => {
-        cards.appendChild(createCardDiv(snack));
+        cards[0].appendChild(createCardDiv(snack));
     });
 };
 
@@ -76,12 +69,26 @@ const appendVotingToDOM = () => {
     siteBody[0].appendChild(votingSection);
 };
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+}
 const castVote = (id) => {
     console.log("id passed", id);
+    let cookieVotes = [];
 
     console.log("before", CastedVotes);
+    console.log("getCookie", getCookie("votes"));
+    if (getCookie("votes")) {
+        cookieVotes = getCookie("votes")?.split(",");
+        console.log("cookieVotes", cookieVotes);
+    }
 
-    if (!CastedVotes.includes(`${id}`) && availableVotesLeft > 0) {
+    if (
+        (!CastedVotes.includes(`${id}`) && availableVotesLeft > 0) ||
+        cookieVotes?.length < 3
+    ) {
         axios
             .post(`http://localhost:3000/snacks/vote/${id}`, id, {
                 headers: {
@@ -100,28 +107,34 @@ const castVote = (id) => {
                 updateVotes(updateID, newVote);
                 availableVotes();
                 CastedVotes.push(res.data.id);
-                setCookie("votes", CastedVotes)
+                setCookie("votes", CastedVotes);
                 console.log("castedvotes", CastedVotes);
             })
             .catch((error) => console.error(error));
     } else {
-        if (availableVotesLeft === 0) {
+        if (availableVotesLeft === 0 || cookieVotes?.length === 3) {
             alert("You have voted 3 times already");
         } else {
-
             alert("You have already Cast your Vote For this item");
         }
     }
 };
 
-function setCookie(cname,cvalue,exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires=" + d.toGMTString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+function setCookie(name, value) {
+    let now = new Date();
+    let exdays =
+        daysInMonth(now.getMonth() + 1, now.getFullYear()) - now.getDate();
 
-   
-  }
+    now.setTime(now.getTime() + exdays * 24 * 60 * 60 * 1000);
+    now.setHours(23, 59, 59, 0);
+    var expires = "expires=" + now.toGMTString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function daysInMonth(month, year) {
+    // Use 1 for January, 2 for February, etc.
+    return new Date(year, month, 0).getDate();
+}
 
 const updateVotes = (id, newVote) => {
     stringID = id.toString();
@@ -134,9 +147,17 @@ const updateVotes = (id, newVote) => {
     console.log("array", arrayClass);
 
     arrayClass.forEach(function (ele, idx) {
-        ele.innerText = newVote;
+        console.log("element", ele);
+        ele.textContent = `${newVote}`;
     });
     console.log("newvotechange", newVote);
+    // let now = new Date();
+    // let exdays = daysInMonth(now.getMonth()+ 1, now.getFullYear()) - now.getDate()
+    // console.log("this is d", now);
+    // console.log("this is d month", now.getMonth());
+    // console.log("this is d year", now.getFullYear());
+    // console.log("this is d year", now.getDate());
+    // console.log("this is exdays", exdays)
 };
 
 const availableVotes = () => {
@@ -145,17 +166,22 @@ const availableVotes = () => {
     console.log("array of available votes", arrayClass);
 
     arrayClass.forEach(function (ele, idx) {
-        let temp = ele.innerText;
+        let temp = ele.textContent;
         console.log("temp", temp);
 
         if (temp > 0) {
             availableVotesLeft = temp - 1;
-            ele.innerText = availableVotesLeft;
+            ele.textContent = `${availableVotesLeft}`;
 
-            console.log(availableVotesLeft)
-            
+            console.log(availableVotesLeft);
         }
     });
+};
+const showVotingDown = () => {
+    let sysdown = document.getElementById("down");
+    console.log("this is sysdown", sysdown);
+
+    sysdown.classList.add("display-down-message");
 };
 
 const getSnacks = () => {
@@ -168,17 +194,28 @@ const getSnacks = () => {
         .then((response) => {
             const snacks = response.data;
 
-            votesorted = snacks.sort((a, b) => {
+            let sysdown = document.getElementById("down");
+            sysdown.classList.remove("display-down-message");
+
+
+            let voteSorted = snacks.sort((a, b) => {
                 return b.votes - a.votes;
             });
 
-            console.log("vote", votesorted);
+            let brandSorted = snacks.sort((a, b) => {
+                return b.brand - a.brand;
+            });
+
+            console.log("vote", voteSorted);
             console.log(response.data);
             // append to DOM
-            appendSnacksToDOM(votesorted);
-            // appendVotingToDOM()
+            appendSnacksToDOM(voteSorted);
+            // appendVotingToDOM(brandSorted)
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+            console.error(error);
+            showVotingDown();
+        });
 };
 
 getSnacks();

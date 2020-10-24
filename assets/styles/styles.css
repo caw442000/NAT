@@ -594,13 +594,21 @@ body {
   padding-top: 20px;
 }
 
+.currently-down {
+  display: none;
+}
+
+.display-down-message {
+  display: block;
+}
 .cards {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin: 25px 0;
+  margin: 25px auto;
+  max-width: 1200px;
 }
 
 .card {
@@ -642,9 +650,6 @@ body {
 
   z-index: 99999;
   color: white;
-  /* text-shadow: 0 0 25px 9px #fff; */
-  /* -webkit-filter: drop-shadow(0 1px 9px #000000); */
-  /* filter: drop-shadow(0 1px 9px #000000); */
 }
 
 
@@ -756,7 +761,7 @@ Voting Section
   display: flex;
   flex-wrap: wrap;
   align-items: top;
-  justify-content: space-between;
+  justify-content: center;
   max-width: 100%;
   width: 1024px;
   padding: 20px;
@@ -767,8 +772,10 @@ Voting Section
 .available-items {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  /* width: 600px; */
   flex: 1;
+  min-width: 500px;
+  max-width: 700px;
   /* height: 600px; */
   /* border: 1px solid black */
 }
@@ -779,6 +786,7 @@ Voting Section
   background-color: #3a8ca0;
   align-items: center;
   padding: 10px;
+  
 }
 
 .available-items-title-count {
@@ -798,6 +806,7 @@ Voting Section
   display: flex;
   flex-direction: column;
   width: 100%;
+  
 }
 .list-item-odd {
   width: 100%;

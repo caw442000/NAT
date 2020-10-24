@@ -86,16 +86,12 @@ const castVote = (id) => {
     }
 
     if (
-        (!CastedVotes.includes(`${id}`) && availableVotesLeft > 0) ||
+        !CastedVotes.includes(`${id}`) &&
+        availableVotesLeft > 0 &&
         cookieVotes?.length < 3
     ) {
-        axios
-            .post(`http://localhost:3000/snacks/vote/${id}`, id, {
-                headers: {
-                    Authorization:
-                        "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
-                },
-            })
+        axiosWithAuth()
+            .post(`vote/${id}`, id)
             .then((res) => {
                 console.log("VoteCast", res);
 
@@ -184,19 +180,23 @@ const showVotingDown = () => {
     sysdown.classList.add("display-down-message");
 };
 
+const axiosWithAuth = () => {
+    return axios.create({
+        baseURL: "http://localhost:3000/snacks",
+        headers: {
+            Authorization: "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
+        },
+    });
+};
+
 const getSnacks = () => {
-    axios
-        .get("http://localhost:3000/snacks", {
-            headers: {
-                Authorization: "Bearer 33b55673-57c7-413f-83ed-5b4ae8d18827",
-            },
-        })
+    axiosWithAuth()
+        .get()
         .then((response) => {
             const snacks = response.data;
 
             let sysdown = document.getElementById("down");
             sysdown.classList.remove("display-down-message");
-
 
             let voteSorted = snacks.sort((a, b) => {
                 return b.votes - a.votes;

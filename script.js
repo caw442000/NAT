@@ -1,44 +1,42 @@
-const CastedVotes = [];
-let availableVotesLeft = 1;
+const CastedVotes =
+    localStorage.getItem("votes")?.split(",") ||
+    getCookie("votes")?.split(",") ||
+    [];
+
+let allowableVotes = 3;
+let availableVotesLeft = allowableVotes - CastedVotes.length;
+let availableSnackItems = [];
 
 const createCardDiv = (snack) => {
     const voteID = `${snack.brand}${snack.id}`;
+
     const card = document.createElement("div");
-    card.classList = "card";
-
     const cardBody = document.createElement("div");
-    cardBody.classList = "card-body card-shadow";
-
     const cardTriangle = document.createElement("div");
-    cardTriangle.classList = "card-corner-triangle";
-
     const cardTriangleText = document.createElement("p");
-    cardTriangleText.classList = `card-corner-triangle-text hdg hdg_5 ${voteID} `;
-    cardTriangleText.setAttribute("id", voteID);
-
     const cardText = document.createElement("div");
-    cardText.classList = "card-text";
-
     const cardTextProduct = document.createElement("h4");
-    cardTextProduct.classList = "hdg hdg_4";
-
     const cardTextBrand = document.createElement("p");
-    cardTextBrand.classList = "card-text-brand hdg";
-
-    let node = document.createTextNode(snack.votes);
-    let nodeBrand = document.createTextNode(snack.brand);
-    let nodeProduct = document.createTextNode(snack.product);
-
+    const node = document.createTextNode(snack.votes);
+    const nodeBrand = document.createTextNode(snack.brand);
+    const nodeProduct = document.createTextNode(snack.product);
     const cardImg = document.createElement("img");
-    cardImg.classList = "card-image";
-    console.log(snack.image);
+
     cardImg.src = snack.image;
+
+    card.classList = "card";
+    cardBody.classList = "card-body card-shadow";
+    cardTriangle.classList = "card-corner-triangle";
+    cardTriangleText.classList = `card-corner-triangle-text hdg hdg_5 ${voteID} `;
+    cardText.classList = "card-text";
+    cardTextProduct.classList = "hdg hdg_4";
+    cardTextBrand.classList = "card-text-brand hdg";
+    cardImg.classList = "card-image";
 
     cardTextProduct.appendChild(nodeProduct);
     cardTextBrand.appendChild(nodeBrand);
     cardText.appendChild(cardTextProduct);
     cardText.appendChild(cardTextBrand);
-
     cardTriangle.appendChild(cardTriangleText);
     cardTriangleText.appendChild(node);
     cardBody.appendChild(cardTriangle);
@@ -47,6 +45,108 @@ const createCardDiv = (snack) => {
     card.appendChild(cardText);
 
     return card;
+};
+
+function CreatePlusSVG() {
+    let xmlns = "http://www.w3.org/2000/svg";
+    let boxWidth = 16;
+    let boxHeight = 16;
+
+    let svgElem = document.createElementNS(xmlns, "svg");
+
+    svgElem.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    svgElem.setAttributeNS(null, "version", "1.1");
+    svgElem.setAttributeNS(null, "id", "Layer_1");
+    svgElem.setAttributeNS(null, "x", "0px");
+    svgElem.setAttributeNS(null, "y", "0px");
+    svgElem.setAttributeNS(
+        null,
+        "viewBox",
+        "0 0 " + boxWidth + " " + boxHeight
+    );
+    svgElem.setAttributeNS(null, "enable-background", "new 0 0 16 16");
+    svgElem.setAttribute("xml:space", "preserve");
+
+    let poly = document.createElementNS(xmlns, "polygon");
+    poly.setAttributeNS(null, "fill", "#FFFFFF");
+    poly.setAttributeNS(
+        null,
+        "points",
+        "16,6 10,6 10,0 6,0 6,6 0,6 0,10 6,10 6,16 10,16 10,10 16,10 "
+    );
+    svgElem.appendChild(poly);
+
+    console.log("svgElem", svgElem);
+    return svgElem;
+}
+const createAvailableItemDiv = (snack, index) => {
+    const voteID = `${snack.brand}${snack.id}`;
+    console.log("voteID", voteID);
+    console.log("index", index + 1);
+    const item = document.createElement("div");
+    item.setAttribute("id", snack.id);
+    item.setAttribute("onclick", `castVote(id)`);
+
+    const plusHolder = document.createElement("div");
+    const plusSVG = CreatePlusSVG();
+
+    plusHolder.appendChild(plusSVG);
+
+    const itemContent = document.createElement("div");
+    const itemText = document.createElement("h4");
+    itemText.classList = "hdg hdg_4 mix-hdg_dark";
+    const itemVotes = document.createElement("p");
+
+    if ((index + 1) % 2 === 0) {
+        item.classList = "list-item-odd";
+        plusHolder.classList = "plus-odd";
+        itemContent.classList = "item-content-odd";
+    } else {
+        item.classList = "list-item-even";
+        plusHolder.classList = "plus-even";
+        itemContent.classList = "item-content-even";
+    }
+    itemVotes.classList = `item-content-votes mix-hdg_dark ${voteID}`;
+
+    let nodeItemVotes = document.createTextNode(snack.votes);
+    let nodeItemText = document.createTextNode(
+        `${snack.brand} ${snack.product}`
+    );
+
+    itemText.appendChild(nodeItemText);
+    itemVotes.appendChild(nodeItemVotes);
+    itemContent.appendChild(itemText);
+    itemContent.appendChild(itemVotes);
+
+    item.appendChild(plusHolder);
+    item.appendChild(itemContent);
+
+    return item;
+};
+
+const createSelectedItemDiv = (snack) => {
+    const voteID = `${snack.brand}${snack.id}`;
+    console.log("voteID", voteID);
+    const selectedItem = document.createElement("div");
+    selectedItem.setAttribute("id", snack.id);
+    selectedItem.classList = "selected-item";
+
+    const selectedItemText = document.createElement("h4");
+    selectedItemText.classList = "hdg hdg_4 mix-hdg_dark";
+    const selectedItemVotes = document.createElement("p");
+    selectedItemVotes.classList = `selected-item-votes hdg hdg_5 mix-hdg_dark ${voteID}`;
+
+    let nodeSelectedVotes = document.createTextNode(snack.votes);
+    let nodeSelectedText = document.createTextNode(
+        `${snack.brand} ${snack.product}`
+    );
+
+    selectedItemText.appendChild(nodeSelectedText);
+    selectedItemVotes.appendChild(nodeSelectedVotes);
+    selectedItem.appendChild(selectedItemText);
+    selectedItem.appendChild(selectedItemVotes);
+
+    return selectedItem;
 };
 
 const appendSnacksToDOM = (snacks) => {
@@ -58,15 +158,41 @@ const appendSnacksToDOM = (snacks) => {
     });
 };
 
-const appendVotingToDOM = () => {
-    const siteBody = document.getElementsByClassName("site-bd");
+const appendVotingToDOM = (snacks) => {
+    const availableItemsList = document.getElementsByClassName(
+        "available-items-list"
+    );
 
-    console.log(siteBody);
+    console.log(availableItemsList);
 
-    const votingSection = document.createElement("div");
-    votingSection.classList = "voting-bd";
+    snacks.map((snack, index) => {
+        availableItemsList[0].appendChild(createAvailableItemDiv(snack, index));
+    });
+};
 
-    siteBody[0].appendChild(votingSection);
+function removeAllChildNodes(parent) {
+    console.log("parent Node", parent);
+    console.log("parent firstChild", parent.firstChild);
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+const appendSelectionToDom = async () => {
+    let selectedItemsList = document.getElementById("selected-items-list");
+
+    await removeAllChildNodes(selectedItemsList);
+
+    const filteredSnacks = availableSnackItems.filter((snack) =>
+        CastedVotes.includes(snack.id)
+    );
+
+    console.log("castedfilter", CastedVotes);
+
+    console.log("Filtered", filteredSnacks);
+
+    filteredSnacks.map((snack) => {
+        selectedItemsList.appendChild(createSelectedItemDiv(snack));
+    });
 };
 
 function getCookie(name) {
@@ -88,7 +214,7 @@ const castVote = (id) => {
     if (
         !CastedVotes.includes(`${id}`) &&
         availableVotesLeft > 0 &&
-        cookieVotes?.length < 3
+        cookieVotes?.length < allowableVotes
     ) {
         axiosWithAuth()
             .post(`vote/${id}`, id)
@@ -100,18 +226,40 @@ const castVote = (id) => {
 
                 console.log("updateID", updateID);
 
-                updateVotes(updateID, newVote);
-                availableVotes();
+                
+                updateVoteLeftCount();
                 CastedVotes.push(res.data.id);
+
+                updateVotes(updateID, newVote);
+
                 setCookie("votes", CastedVotes);
+                localStorage.setItem("votes", CastedVotes);
                 console.log("castedvotes", CastedVotes);
+                axiosWithAuth()
+                    .get()
+                    .then((response) => {
+                        availableSnackItems = brandSort(response.data);
+                        appendSelectionToDom();
+                        
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        showVotingDown();
+                    });
+
+
+                
+
             })
             .catch((error) => console.error(error));
     } else {
-        if (availableVotesLeft === 0 || cookieVotes?.length === 3) {
+        if (availableVotesLeft === 0 || cookieVotes?.length === allowableVotes) {
             alert("You have voted 3 times already");
+            //open modal with voted message
+            //grab the 3 items and display them in the modal
         } else {
             alert("You have already Cast your Vote For this item");
+            //open modal with already casted vote message for grab item and show it with id
         }
     }
 };
@@ -136,46 +284,43 @@ const updateVotes = (id, newVote) => {
     stringID = id.toString();
 
     console.log("id in updateVotes", id);
-    console.log("newVog=te", newVote);
+    console.log("newVogte", newVote);
 
-    const arrayClass = [...document.getElementsByClassName(stringID)];
+    const selectedClassArray = [...document.getElementsByClassName(stringID)];
 
-    console.log("array", arrayClass);
+    console.log("array", selectedClassArray);
 
-    arrayClass.forEach(function (ele, idx) {
+    selectedClassArray.forEach(function (ele, idx) {
         console.log("element", ele);
         ele.textContent = `${newVote}`;
     });
     console.log("newvotechange", newVote);
-    // let now = new Date();
-    // let exdays = daysInMonth(now.getMonth()+ 1, now.getFullYear()) - now.getDate()
-    // console.log("this is d", now);
-    // console.log("this is d month", now.getMonth());
-    // console.log("this is d year", now.getFullYear());
-    // console.log("this is d year", now.getDate());
-    // console.log("this is exdays", exdays)
 };
 
-const availableVotes = () => {
-    const arrayClass = [...document.getElementsByClassName("available-votes")];
+const updateVoteLeftCount = () => {
+    const availableTotal = document.getElementById("available-votes");
 
-    console.log("array of available votes", arrayClass);
+    const selectionTalley = document.getElementById("selection-title-count");
 
-    arrayClass.forEach(function (ele, idx) {
-        let temp = ele.textContent;
-        console.log("temp", temp);
+    if (availableVotesLeft > 0) {
+        availableVotesLeft -= 1;
+        availableTotal.textContent = `${availableVotesLeft}`;
 
-        if (temp > 0) {
-            availableVotesLeft = temp - 1;
-            ele.textContent = `${availableVotesLeft}`;
+    }
 
-            console.log(availableVotesLeft);
-        }
-    });
+    selectionTalley.textContent = `${Math.abs(availableVotesLeft - allowableVotes)}`;
 };
 const showVotingDown = () => {
     let sysdown = document.getElementById("down");
-    console.log("this is sysdown", sysdown);
+
+    // remove snackvoting if system is down
+    const votingBody = document.getElementById("voting-bd");
+    
+    votingBody.remove()
+   
+    // remove currently in stock text
+    const stockText = document.getElementById("stockText");
+    stockText.remove()
 
     sysdown.classList.add("display-down-message");
 };
@@ -189,28 +334,60 @@ const axiosWithAuth = () => {
     });
 };
 
+const brandSort = (snacks) => {
+    let brandSorted = snacks.slice().sort((a, b) => {
+        if (a.brand < b.brand) {
+            return -1;
+        }
+        if (a.brand > b.brand) {
+            return 1;
+        }
+        return 0;
+    });
+    return brandSorted;
+};
+
+const voteSort = (snacks) => {
+    const voteSorted = snacks.slice().sort((a, b) => {
+        if (a.votes < b.votes) {
+            return 1;
+        }
+        if (a.votes > b.votes) {
+            return -1;
+        }
+        return 0;
+    });
+
+    return voteSorted;
+};
+
+const onSucessLoad = (snacks) => {
+    let sysdown = document.getElementById("down");
+    sysdown.classList.remove("display-down-message");
+
+    appendSnacksToDOM(voteSort(snacks));
+    appendVotingToDOM(voteSort(snacks));
+    appendSelectionToDom(brandSort(snacks));
+
+    const availableTotal = document.getElementById("available-votes");
+    availableTotal.textContent = `${availableVotesLeft}`;
+
+    const totalItems = document.getElementById("available-items-title-count");
+    totalItems.textContent = `${snacks.length}`;
+
+    const selectionTalley = document.getElementById("selection-title-count");
+    selectionTalley.textContent = `${Math.abs(availableVotesLeft - allowableVotes)}`;
+
+};
+
 const getSnacks = () => {
     axiosWithAuth()
         .get()
         .then((response) => {
-            const snacks = response.data;
+            availableSnackItems = brandSort(response.data);
 
-            let sysdown = document.getElementById("down");
-            sysdown.classList.remove("display-down-message");
-
-            let voteSorted = snacks.sort((a, b) => {
-                return b.votes - a.votes;
-            });
-
-            let brandSorted = snacks.sort((a, b) => {
-                return b.brand - a.brand;
-            });
-
-            console.log("vote", voteSorted);
-            console.log(response.data);
-            // append to DOM
-            appendSnacksToDOM(voteSorted);
-            // appendVotingToDOM(brandSorted)
+            // append to DOM on Start
+            onSucessLoad(availableSnackItems);
         })
         .catch((error) => {
             console.error(error);

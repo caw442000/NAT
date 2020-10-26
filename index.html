@@ -2,7 +2,6 @@
 <html lang="en-us">
     <head>
         <title>Nerdery FronEnd NAT</title>
-    
 
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -145,7 +144,7 @@
                     </div>
                 </div>
                 <div class="stockedBanner">
-                    <div class="stockText u-constrainer">
+                    <div id="stockText" class="stockText u-constrainer">
                         <h1 class="hdg hdg_2">Currently In Stock</h1>
                         <p class="copy stockedCopy">
                             Here are the snacks that are available in the
@@ -153,14 +152,15 @@
                         </p>
                     </div>
                     <div id="down" class="currently-down">
-                        <h2 class="hdg hdg_2"> We are sorry however currently in stock is not able to be displayed</h2>
+                        <h2 class="hdg hdg_2">
+                            We are sorry however currently in stock is not able
+                            to be displayed
+                        </h2>
                     </div>
-                    <div class="cards">
-
-                    </div>
+                    <div class="cards"></div>
                 </div>
             </div>
-            <div class="voting-bd">
+            <div id="voting-bd" class="voting-bd">
                 <div class="votingText">
                     <h2 class="hdg hdg_2 mix-hdg_dark">Snack Voting</h2>
                     <p class="copy votingCopy">
@@ -168,162 +168,23 @@
                         rotation
                     </p>
                     <p class="copy votingCopy voting-remaining hdg_4">
-                        <span class="available-votes">3</span> Votes Remaining
+                        <span id= "available-votes" class="available-votes"></span> Votes Remaining
                     </p>
                 </div>
                 <div class="voting-section">
                     <div class="available-items">
                         <div class="available-items-title">
                             <h3 class="hdg hdg_3">Available Items</h3>
-                            <p class="available-items-title-count hdg_5">8</p>
+                            <p id="available-items-title-count" class="available-items-title-count hdg_5"></p>
                         </div>
-                        <div class="available-items-list">
-                            <div
-                                id="1"
-                                onclick="castVote(id)"
-                                class="list-item-odd"
-                            >
-                                <div class="plus-odd">
-                                    <svg
-                                        version="1.1"
-                                        id="Layer_1"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        x="0px"
-                                        y="0px"
-                                        viewBox="0 0 16 16"
-                                        enable-background="new 0 0 16 16"
-                                        xml:space="preserve"
-                                    >
-                                        <polygon
-                                            fill="#FFFFFF"
-                                            points="16,6 10,6 10,0 6,0 6,6 0,6 0,10 6,10 6,16 10,16 10,10 16,10 "
-                                        />
-                                    </svg>
-                                </div>
-                                <div class="item-content-odd">
-                                    <h3 class="hdg hdg_4 mix-hdg_dark">
-                                        Bear Naked V'nilla Alumund Granola
-                                    </h3>
-                                    <p
-                                        class="item-content-votes mix-hdg_dark Bear Naked1"
-                                    >
-                                        8
-                                    </p>
-                                </div>
-                            </div>
-                            <div
-                                id="2"
-                                onclick="castVote(id)"
-                                class="list-item-even"
-                            >
-                                <div class="plus-even">
-                                    <svg
-                                        version="1.1"
-                                        id="Layer_1"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        x="0px"
-                                        y="0px"
-                                        viewBox="0 0 16 16"
-                                        enable-background="new 0 0 16 16"
-                                        xml:space="preserve"
-                                    >
-                                        <polygon
-                                            fill="#FFFFFF"
-                                            points="16,6 10,6 10,0 6,0 6,6 0,6 0,10 6,10 6,16 10,16 10,10 16,10 "
-                                        />
-                                    </svg>
-                                </div>
-                                <div class="item-content-even">
-                                    <div class="hdg hdg_4 mix-hdg_dark">
-                                        Emerald Nuts Dill Pickle-Flavored
-                                        Cashews
-                                    </div>
-                                    <p
-                                        class="item-content-votes mix-hdg_dark Emerald Nuts2"
-                                    >
-                                        8
-                                    </p>
-                                </div>
-                            </div>
-                            <div
-                                id="3"
-                                onclick="castVote(id)"
-                                class="list-item-odd"
-                            >
-                                <div class="plus-odd">
-                                    <svg
-                                        version="1.1"
-                                        id="Layer_1"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        x="0px"
-                                        y="0px"
-                                        viewBox="0 0 16 16"
-                                        enable-background="new 0 0 16 16"
-                                        xml:space="preserve"
-                                    >
-                                        <polygon
-                                            fill="#FFFFFF"
-                                            points="16,6 10,6 10,0 6,0 6,6 0,6 0,10 6,10 6,16 10,16 10,10 16,10 "
-                                        />
-                                    </svg>
-                                </div>
-                                <div class="item-content-odd">
-                                    <h3 class="hdg hdg_4 mix-hdg_dark">
-                                        Kashi Honey Pecan Baklava Nutrition Bars
-                                    </h3>
-                                    <p
-                                        class="item-content-votes mix-hdg_dark Kashi3"
-                                    >
-                                        8
-                                    </p>
-                                </div>
-                            </div>
-                            <div
-                                id="4"
-                                onclick="castVote(id)"
-                                class="list-item-even"
-                            >
-                                <div class="plus-even">
-                                    <svg
-                                        version="1.1"
-                                        id="Layer_1"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        x="0px"
-                                        y="0px"
-                                        viewBox="0 0 16 16"
-                                        enable-background="new 0 0 16 16"
-                                        xml:space="preserve"
-                                    >
-                                        <polygon
-                                            fill="#FFFFFF"
-                                            points="16,6 10,6 10,0 6,0 6,6 0,6 0,10 6,10 6,16 10,16 10,10 16,10 "
-                                        />
-                                    </svg>
-                                </div>
-                                <div class="item-content-even">
-                                    <div class="hdg hdg_4 mix-hdg_dark">
-                                        Cliff Energy Bars
-                                    </div>
-                                    <p
-                                        class="item-content-votes mix-hdg_dark Cliff4"
-                                    >
-                                        8
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="available-items-list"></div>
                     </div>
                     <div class="selection">
                         <div class="selection-title">
                             <h3 class="hdg hdg_3 mix-hdg_dark">Selection</h3>
-                            <div class="selection-title-count hdg hdg_5">
-                                <p>3</p>
-                            </div>
+                            <p id = "selection-title-count"class="selection-title-count hdg hdg_5"></p>
                         </div>
+                        <div id= "selected-items-list" class="selected-items-list"></div>
                     </div>
                 </div>
             </div>
@@ -527,5 +388,4 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="script.js"></script>
     </body>
-
 </html>

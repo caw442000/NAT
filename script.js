@@ -169,6 +169,7 @@ const appendVotingToDOM = (snacks) => {
     });
 };
 
+//removes all child nodes for dom element
 const removeAllChildNodes = (parent) => {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
@@ -187,6 +188,26 @@ const appendSelectionToDom = async () => {
         selectedItemsList.appendChild(createSelectedItemDiv(snack));
     });
 };
+
+// fucntion for setting Cooking expiration
+const daysInMonth = (month, year) => {
+    // Use 1 for January, 2 for February, etc.
+    return new Date(year, month, 0).getDate();
+}
+
+// Cookies to track disable voting after 3 votes
+function setCookie(name, value) {
+    let now = new Date();
+    let exdays =
+        daysInMonth(now.getMonth() + 1, now.getFullYear()) - now.getDate();
+
+    now.setTime(now.getTime() + exdays * 24 * 60 * 60 * 1000);
+    now.setHours(23, 59, 59, 0);
+
+    let expires = `expires=${now.toGMTString()}`;
+
+    document.cookie = `${name}=${value};${expires};path=/`;
+}
 
 function getCookie(name){
     const value = `; ${document.cookie}`;
@@ -208,93 +229,32 @@ const castVote = (id) => {
         cookieVotes?.length < allowableVotes
     ) {
         axiosWithAuth()
-            .post(`vote/${id}`, id)
+            .post(`vote/${id}`)
             .then((res) => {
-                const updateID = `${res.data.brand}${res.data.id}`;
-                let newVote = res.data.votes;
-
                 updateVoteLeftCount();
                 CastedVotes.push(res.data.id);
-                updateVotes(updateID, newVote);
                 setCookie("votes", CastedVotes);
 
-                axiosWithAuth()
-                    .get()
-                    .then((response) => {
-                        availableSnackItems = brandSort(response.data);
-                        appendSelectionToDom();
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        showVotingDown();
-                    });
+                getSnacks()
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+              console.error(error);
+              displayModal("js-modalError");
+          });
     } else {
         if (
             availableVotesLeft === 0 ||
             cookieVotes?.length === allowableVotes
         ) {
             displayModal("js-modalLimitReached");
-        } else {
+          } else {
             displayModal("js-modalPrevSelected");
+          }
         }
-    }
-};
+      };
+      
 
-// Modal for alerts about votes
-const displayModal = (alert) => {
-    let modal = document.getElementById(`${alert}`);
-    console.log("this is alert", alert);
-
-    console.log("this is modal", modal);
-
-    // Get the <span> element that closes the modal
-    let span = document.getElementById(`${alert}-close`);
-
-    modal.style.display = "block";
-
-    span.onclick = function () {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-};
-
-// Cookies to track disable voting after 3 votes
-function setCookie(name, value) {
-    let now = new Date();
-    let exdays =
-        daysInMonth(now.getMonth() + 1, now.getFullYear()) - now.getDate();
-
-    now.setTime(now.getTime() + exdays * 24 * 60 * 60 * 1000);
-    now.setHours(23, 59, 59, 0);
-
-    let expires = `expires=${now.toGMTString()}`;
-
-    // document.cookie = name + '=' + value + ';' + expires + ';path=/';
-    document.cookie = `${name}=${value};${expires};path=/`;
-}
-
-function daysInMonth(month, year) {
-    // Use 1 for January, 2 for February, etc.
-    return new Date(year, month, 0).getDate();
-}
-
-const updateVotes = (id, newVote) => {
-    const changeVote = document.getElementsByClassName(`${id}`);
-
-    const changeVoteArray = Array.from(changeVote);
-
-    changeVoteArray.forEach((ele) => {
-        ele.textContent = `${newVote}`;
-    });
-};
-
+//updates Vote count for remaining and in selection title header
 const updateVoteLeftCount = () => {
     const availableTotal = document.getElementById("js-available-votes");
     const selectionTalley = document.getElementById("js-selection-title-count");
@@ -308,6 +268,10 @@ const updateVoteLeftCount = () => {
         availableVotesLeft - allowableVotes
     )}`;
 };
+
+
+
+// displays Voting down message if API call errors
 const showVotingDown = () => {
     let sysdown = document.getElementById("js-stockedSection-content-down");
 
@@ -322,6 +286,27 @@ const showVotingDown = () => {
     sysdown.classList.add("stockedSection-content-down-copy");
 };
 
+// Modal for alerts about votes
+const displayModal = (alert) => {
+  let modal = document.getElementById(`${alert}`);
+
+  // Get the <span> element that closes the modal
+  let span = document.getElementById(`${alert}-close`);
+
+  modal.style.display = "block";
+
+  span.onclick = () => {
+      modal.style.display = "none";
+  };
+
+  window.onclick = (event) => {
+      if (event.target === modal) {
+          modal.style.display = "none";
+      }
+  };
+};
+
+// API Authorization
 const axiosWithAuth = () => {
     return axios.create({
         baseURL: "http://localhost:3000/snacks",
@@ -331,6 +316,8 @@ const axiosWithAuth = () => {
     });
 };
 
+
+// Sort by brand for Selection
 const brandSort = (snacks) => {
     let brandSorted = snacks.slice().sort((a, b) => {
         if (a.brand < b.brand) {
@@ -345,6 +332,7 @@ const brandSort = (snacks) => {
     return brandSorted;
 };
 
+// Sort by vote for Available
 const voteSort = (snacks) => {
     const voteSorted = snacks.slice().sort((a, b) => {
         if (a.votes < b.votes) {
@@ -361,6 +349,14 @@ const voteSort = (snacks) => {
 const onSucessLoad = async (snacks) => {
     let sysdown = document.getElementById("js-stockedSection-content-down");
     sysdown.classList.remove("stockedSection-content-down-copy");
+
+    const inStock = document.getElementById("js-stockedSection-content-bd");
+
+    let availableItemsList = document.getElementById("js-available-items-list");
+
+    await removeAllChildNodes(inStock)
+    await removeAllChildNodes(availableItemsList)
+
 
     appendSnacksToDOM(voteSort(snacks));
     appendVotingToDOM(voteSort(snacks));

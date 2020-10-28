@@ -695,7 +695,7 @@ body {
     }
 
     .card-corner-triangle {
-        margin: 8px;
+        margin: 5px;
         border-width: 0 40px 40px 0;
         position: absolute;
     }
@@ -928,7 +928,7 @@ Voting Section
 }
 
 .modalPrevSelected,
-.modalLimitReached {
+.modalLimitReached, .modalError {
     display: none; /* Hidden by default */
     width: 100%; /* Full width */
     height: 100%; /* Full height */

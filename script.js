@@ -126,7 +126,6 @@ const createAvailableItemDiv = (snack, index) => {
 
 const createSelectedItemDiv = (snack) => {
     const voteID = `${snack.brand}${snack.id}`;
-    console.log("voteID", voteID);
     const selectedItem = document.createElement("div");
     selectedItem.setAttribute("id", snack.id);
     selectedItem.classList = "selected-item";

@@ -569,20 +569,18 @@ body {
 /* ---------------------------------------------------------------------
  Currently In Stock
 ------------------------------------------------------------------------ */
-.stockedBanner {
+.stockedSection {
     display: flex;
     flex-direction: column;
-    /* height: 90vh; */
-    /* max-height: 975px; */
     min-height: 675px;
+    padding-top: 30px;
     background-image: url("../media/images/geo.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     text-align: center;
-    padding-top: 30px;
 }
 
-.stockedText {
+.stockedSection-content-hd {
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -590,30 +588,34 @@ body {
     width: 100%;
 }
 
-.stockedCopy {
-    padding-top: 20px;
+.stockedSection-content-hd-copy {
+    margin: 10px 10px 10px;
+    line-height: 1.8;
+    font-size: 16px;
 }
 
-.currently-down {
-    display: none;
+.stockedSection-content-down {
+    display: none !important;
 }
 
-.display-down-message {
-    display: block;
+.stockedSection-content-down-copy {
+    display: block !important;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
 }
-.cards {
+.stockedSection-content-bd {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: left;
     justify-content: center;
     width: 100%;
-    margin: 25px auto;
+    margin: 10px auto;
     max-width: 1200px;
 }
 
 .card {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 13px 5px;
 }
 
 .card-shadow {
@@ -622,170 +624,190 @@ body {
 }
 
 .card-body {
-    width: 315px;
-    height: 250px;
-    background-color: white;
-    margin: 10px 20px;
-    /* padding: 10px; */
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 5px;
     position: relative;
+    width: 130px;
+    height: 125px;
+    background-color: #ffffff;
 }
 .card-image {
-    width: 55%;
+    width: 75%;
 }
 
 .card-corner-triangle {
     display: block;
     top: 0;
     right: 0;
-    margin: 8px;
-
+    margin: 2px;
     border-style: solid;
-    border-width: 0 40px 40px 0; /* adjust for size of triangle */
-    border-color: transparent #0dc3dd transparent transparent; /* adjust for color of triangle */
+    border-width: 0 1.2rem 1.2rem 0;
+    border-color: transparent #0dc3dd transparent transparent;
     position: absolute;
 
     z-index: 99999;
-    color: white;
+    color: #ffffff;
 }
 
 .card-corner-triangle-text {
-    margin: 5px 22px;
+    margin: 2px 10px;
     position: absolute;
     top: 0;
+    font-size: 7px;
 }
 
 .card-text {
     text-align: left;
-    margin-left: 20px;
+    width: 100%;
 }
-/* .card-text > h5 {
-  font-size: 12px;
-
-} */
 
 .card-text > p {
-    font-size: 1rem;
-    margin-top: 8px;
+    font-size: 8px;
+    margin-top: 4px;
 }
 
 .card-text > h4 {
-    font-size: 1.1rem;
+    font-size: 10px;
 }
 
 @media (min-width: 401px) {
-    .stockedBanner {
-        box-sizing: border-box;
+    .stockedSection-content-bd {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 25px auto;
     }
 
-    /* .card-body {
-    /* width: 160px;
-    height: 100px;
-    background-color: white;
-    margin: 10px 20px;
-    /* padding: 10px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }  
-  */
+    .card {
+        margin: 10px 0px;
+    }
+
+    .card-body {
+        width: 315px;
+        height: 250px;
+        margin: 10px 20px;
+    }
+
+    .card-image {
+        width: 55%;
+    }
+
+    .card-corner-triangle {
+        margin: 8px;
+        border-width: 0 40px 40px 0;
+        position: absolute;
+    }
+
+    .card-corner-triangle-text {
+        margin: 5px 22px;
+        font-size: 12px;
+    }
+    .card-text {
+        margin-left: 20px;
+    }
+    .card-text > p {
+        margin-top: 8px;
+        font-size: 1rem;
+    }
+
+    .card-text > h4 {
+        font-size: 1.1rem;
+    }
 }
 
 @media (min-width: 801px) {
-    .stockedBanner {
-        background-image: url("../media/images/geo.jpg");
+    .stockedSection-content-hd-copy {
+        font-size: 22px;
     }
 }
 
 @media (min-width: 1841px) {
+
     .stockedBanner {
         border-width: 0;
     }
-}
-
-.stockedBanner-content-hd {
-    margin-bottom: 24px;
-}
-
-.stockedBanner-content-bd {
-    margin-bottom: 24px;
 }
 
 /* ---------------------------------------------------------------------
 Voting Section
 ------------------------------------------------------------------------ */
 
-.voting-bd {
+.votingSection {
     display: flex;
     flex-direction: column;
     min-height: 675px;
+    margin: 30px auto;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    margin: 40px auto;
 }
 
-.votingText {
+.votingSection-content-hd {
     display: flex;
     flex-direction: column;
-    align-content: center;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    width: 100%;
 }
 
 .votingCopy {
-    padding-top: 20px;
+    padding: 25px;
+    margin: 0 15px;
+    font-size: 18px;
     color: #919191;
 }
 
 .voting-remaining {
-    margin: 20px auto;
+    display: none !important;
     width: 320px;
     padding-top: 10px;
     border-top: 1px solid #706e70;
+    margin: 20px auto;
 }
 
-.voting-section {
+.votingSection-content-bd {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    /* align-items: top; */
-    justify-content: center;
+    width: 400px;
     max-width: 100%;
-    width: 1024px;
-    padding: 20px;
-    margin: 0 auto;
+    margin: 20px auto;
+    justify-content: center;
+    align-items: center;
 }
 
 .available-items {
     display: flex;
     flex-direction: column;
-    /* width: 600px; */
-    flex: 1;
-    min-width: 500px;
+    width: 355px;
+    min-width: 355px;
     max-width: 600px;
-    /* height: 600px; */
-    /* border: 1px solid black */
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 
 .available-items-title {
     display: flex;
-    justify-content: space-between;
-    background-color: #3a8ca0;
-    align-items: center;
     padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3a8ca0;
+    font-size: 14px;
 }
 
 .available-items-title-count {
-    background-color: white;
+    display: none;
     width: 20px;
     height: 20px;
-    display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    font-weight: bold;
+    background-color: #ffffff;
     color: #3a8ca0;
+    font-weight: bold;
 }
 
 .available-items-list {
@@ -793,6 +815,11 @@ Voting Section
     flex-direction: column;
     width: 100%;
 }
+
+.item-content-text {
+    font-size: 14px;
+}
+
 .list-item-odd {
     width: 100%;
     display: flex;
@@ -800,19 +827,19 @@ Voting Section
 }
 
 .plus-odd {
-    background-color: #c5c5c5;
     width: 17px;
     height: 17px;
     padding: 15px;
+    background-color: #c5c5c5;
 }
 
 .item-content-odd {
-    background-color: #d6d6d6;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex: 1;
     padding: 10px;
+    background-color: #d6d6d6;
+    align-items: center;
 }
 
 .list-item-even {
@@ -822,49 +849,57 @@ Voting Section
 }
 
 .plus-even {
-    background-color: #cfcfcf;
-    /* background-image: url("/assets/media/images/plus.svg"); */
     width: 17px;
     height: 17px;
     padding: 15px;
+    background-color: #cfcfcf;
 }
 
 .item-content-even {
-    background-color: #e1e1e1;
-    flex: 1;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     flex: 1;
     padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e1e1e1;
+}
+
+.item-content-votes {
+    display: none !important;
+}
+
+.list-item-odd:hover,
+.list-item-even:hover {
+    font-style: oblique;
 }
 
 .selection {
     display: flex;
     flex-direction: column;
-    width: 400px;
-    /* height: 600px; */
-    margin-left: 20px;
+    min-width: 355px;
+    margin: 0 10px;
 }
 
 .selection-title {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid black;
-
     align-items: center;
+    border-bottom: 1px solid black;
     padding: 10px;
+}
+.selection-title-text {
+    font-size: 24px;
 }
 
 .selection-title-count {
+    display: none !important;
     width: 20px;
     height: 20px;
-    display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    font-weight: bold;
     background-color: #3a8ca0;
+    font-weight: bold;
 }
 
 .selected-items-list {
@@ -875,128 +910,135 @@ Voting Section
 
 .selected-item {
     display: flex;
+    margin: 20px 0px 15px;
     justify-content: space-between;
     align-items: center;
-    flex: 1;
-    padding: 15px 10px;
+}
+
+.selected-item-text {
+    font-size: 14px;
 }
 
 .selected-item-votes {
-  width: 20px;
-    display: flex;
+    display: none !important;
     justify-content: center;
     align-items: center;
+    width: 20px;
     font-weight: bold;
 }
 
-/*
-
-.card {
-  margin-top: 10px;
-  margin-bottom: 10px;
+.modalPrevSelected,
+.modalLimitReached {
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    position: fixed; /* Stay in place */
+    padding-top: 100px; /* Location of the box */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
-.card-shadow {
-  -webkit-filter: drop-shadow(5px 5px 1px rgba(0,0,0, 0.1));
-  filter: drop-shadow(5px 5px 1px rgba(0,0,0, 0.1));
+/* Modal Content */
+.modal-content {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #888;
 }
 
-.card-body {
-  width: 315px;
-  height: 250px;
-  background-color: white;
-  margin: 10px 20px;
-  /* padding: 10px; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.card-image {
-  width:55%; 
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.card-corner-triangle {
-  display: block;
-  top: 0;
-  right: 0;
-  margin: 8px;
-  
-  border-style: solid;
-  border-width: 0 40px 40px 0; /* adjust for size of triangle 
-  border-color: transparent #0dc3dd transparent transparent; /* adjust for color of triangle 
-  position: absolute;
-
-  z-index: 99999;
-  color: white;
-  /* text-shadow: 0 0 25px 9px #fff; */
-/* -webkit-filter: drop-shadow(0 1px 9px #000000); */
-/* filter: drop-shadow(0 1px 9px #000000); 
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
-
-
-.card-corner-triangle-text {
- margin: 5px 22px;
-  position: absolute;
-  top: 0;
-}
-
-.card-text {
-  text-align: left;
-  margin-left: 20px;
-}
-/* .card-text > h5 {
-  font-size: 12px;
-
-} 
-
-.card-text > p {
-  font-size: 1rem;
-  margin-top: 8px;
-}
-
-.card-text > h4 {
-  font-size: 1.1rem;
-}
-
 @media (min-width: 401px) {
-  .stockedBanner {
-    box-sizing: border-box;
-  }
-
-  /* .card-body {
-    /* width: 160px;
-    height: 100px;
-    background-color: white;
-    margin: 10px 20px;
-    /* padding: 10px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }  
-  
+    .votingSection-content-bd {
+        width: 100%;
+        margin: 20px auto;
+    }
 }
 
 @media (min-width: 801px) {
-  .stockedBanner {
-    background-image: url("../media/images/geo.jpg");
-  }
+    .votingSection-content {
+        width: 1024px;
+        margin: 10px auto;
+    }
+    .votingSection-content-hd {
+        margin: 0 auto;
+    }
+    .votingSection-content-bd {
+        flex-direction: row;
+        width: 1024px;
+        margin: 20px auto;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .votingCopy {
+        padding: 15px;
+        font-size: 24px;
+    }
+
+    .voting-remaining {
+        display: block !important;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        padding-top: 5px;
+        font-size: 18px;
+    }
+    .available-items {
+        width: 600px;
+        min-width: 500px;
+    }
+    .available-items-title-count {
+        display: flex !important;
+    }
+
+    .item-content-votes {
+        display: flex !important;
+    }
+
+    .selection {
+        width: 400px;
+        max-width: 100%;
+        margin: 0;
+        margin-left: 20px;
+    }
+
+    .selected-item {
+        flex: 1;
+        margin: 15px 10px;
+    }
+
+    .selection-title-text {
+        font-size: 32px;
+    }
+
+    .selection-title-count {
+        display: flex !important;
+    }
+
+    .selected-item-votes {
+        display: flex !important;
+    }
 }
 
 @media (min-width: 1841px) {
-  .stockedBanner {
-    border-width: 0;
-  }
-}
 
-.stockedBanner-content-hd {
-  margin-bottom: 24px;
 }
-
-.stockedBanner-content-bd {
-  margin-bottom: 24px;
-} */
 
 /* ---------------------------------------------------------------------
  icon

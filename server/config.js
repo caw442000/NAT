@@ -11,7 +11,7 @@ module.exports = {
   'token': '33b55673-57c7-413f-83ed-5b4ae8d18827',
   'snacks': [
     {
-      id: '7',
+      id: '1',
       brand: "Bear Naked",
       product: "V'nilla Almund Granola",
       description: "Every bag of Granola starts with us foraging for irresistible flavors and bountiful chunks of goodness. This light and crispy Granola is made with whole grain oats and crunchy Almunds.",

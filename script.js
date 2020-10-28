@@ -1,12 +1,11 @@
-const CastedVotes =
-    localStorage.getItem("votes")?.split(",") ||
-    getCookie("votes")?.split(",") ||
+// Declare Global
+const CastedVotes = getCookie("votes")?.split(",") ||
     [];
-
 let allowableVotes = 3;
 let availableVotesLeft = allowableVotes - CastedVotes.length;
 let availableSnackItems = [];
 
+// Generates dynamic card
 const createCardDiv = (snack) => {
     const voteID = `${snack.brand}${snack.id}`;
 
@@ -19,7 +18,11 @@ const createCardDiv = (snack) => {
     const cardTextBrand = document.createElement("p");
     const node = document.createTextNode(snack.votes);
     const nodeBrand = document.createTextNode(snack.brand);
-    const nodeProduct = document.createTextNode(snack.product);
+
+    //Shortens the product name
+    const nodeProduct = document.createTextNode(
+        `${snack.product.substr(0, 18)}...`
+    );
     const cardImg = document.createElement("img");
 
     cardImg.src = snack.image;
@@ -47,7 +50,7 @@ const createCardDiv = (snack) => {
     return card;
 };
 
-function CreatePlusSVG() {
+const CreatePlusSVG = () => {
     let xmlns = "http://www.w3.org/2000/svg";
     let boxWidth = 16;
     let boxHeight = 16;
@@ -76,13 +79,10 @@ function CreatePlusSVG() {
     );
     svgElem.appendChild(poly);
 
-    console.log("svgElem", svgElem);
     return svgElem;
-}
+};
 const createAvailableItemDiv = (snack, index) => {
     const voteID = `${snack.brand}${snack.id}`;
-    console.log("voteID", voteID);
-    console.log("index", index + 1);
     const item = document.createElement("div");
     item.setAttribute("id", snack.id);
     item.setAttribute("onclick", `castVote(id)`);
@@ -94,7 +94,8 @@ const createAvailableItemDiv = (snack, index) => {
 
     const itemContent = document.createElement("div");
     const itemText = document.createElement("h4");
-    itemText.classList = "hdg hdg_4 mix-hdg_dark";
+    itemText.classList = "item-content-text mix-hdg_dark";
+
     const itemVotes = document.createElement("p");
 
     if ((index + 1) % 2 === 0) {
@@ -117,7 +118,6 @@ const createAvailableItemDiv = (snack, index) => {
     itemVotes.appendChild(nodeItemVotes);
     itemContent.appendChild(itemText);
     itemContent.appendChild(itemVotes);
-
     item.appendChild(plusHolder);
     item.appendChild(itemContent);
 
@@ -132,7 +132,7 @@ const createSelectedItemDiv = (snack) => {
     selectedItem.classList = "selected-item";
 
     const selectedItemText = document.createElement("h4");
-    selectedItemText.classList = "hdg hdg_4 mix-hdg_dark";
+    selectedItemText.classList = "selected-item-text hdg mix-hdg_dark";
     const selectedItemVotes = document.createElement("p");
     selectedItemVotes.classList = `selected-item-votes hdg hdg_5 mix-hdg_dark ${voteID}`;
 
@@ -150,35 +150,33 @@ const createSelectedItemDiv = (snack) => {
 };
 
 const appendSnacksToDOM = (snacks) => {
-    const cards = document.getElementsByClassName("cards");
+    const [cards] = document.getElementsByClassName(
+        "stockedSection-content-bd"
+    );
 
     //iterate over all snacks
     snacks.map((snack) => {
-        cards[0].appendChild(createCardDiv(snack));
+        cards.appendChild(createCardDiv(snack));
     });
 };
 
 const appendVotingToDOM = (snacks) => {
-    const availableItemsList = document.getElementsByClassName(
+    const [availableItemsList] = document.getElementsByClassName(
         "available-items-list"
     );
 
-    console.log(availableItemsList);
-
     snacks.map((snack, index) => {
-        availableItemsList[0].appendChild(createAvailableItemDiv(snack, index));
+        availableItemsList.appendChild(createAvailableItemDiv(snack, index));
     });
 };
 
-function removeAllChildNodes(parent) {
-    console.log("parent Node", parent);
-    console.log("parent firstChild", parent.firstChild);
+const removeAllChildNodes = (parent) => {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
 }
 const appendSelectionToDom = async () => {
-    let selectedItemsList = document.getElementById("selected-items-list");
+    let selectedItemsList = document.getElementById("js-selected-items-list");
 
     await removeAllChildNodes(selectedItemsList);
 
@@ -186,29 +184,23 @@ const appendSelectionToDom = async () => {
         CastedVotes.includes(snack.id)
     );
 
-    console.log("castedfilter", CastedVotes);
-
-    console.log("Filtered", filteredSnacks);
-
     filteredSnacks.map((snack) => {
         selectedItemsList.appendChild(createSelectedItemDiv(snack));
     });
 };
 
-function getCookie(name) {
+function getCookie(name){
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
 }
+
 const castVote = (id) => {
-    console.log("id passed", id);
+   
     let cookieVotes = [];
 
-    console.log("before", CastedVotes);
-    console.log("getCookie", getCookie("votes"));
     if (getCookie("votes")) {
         cookieVotes = getCookie("votes")?.split(",");
-        console.log("cookieVotes", cookieVotes);
     }
 
     if (
@@ -219,51 +211,62 @@ const castVote = (id) => {
         axiosWithAuth()
             .post(`vote/${id}`, id)
             .then((res) => {
-                console.log("VoteCast", res);
-
                 const updateID = `${res.data.brand}${res.data.id}`;
                 let newVote = res.data.votes;
 
-                console.log("updateID", updateID);
-
-                
                 updateVoteLeftCount();
                 CastedVotes.push(res.data.id);
-
                 updateVotes(updateID, newVote);
-
                 setCookie("votes", CastedVotes);
-                localStorage.setItem("votes", CastedVotes);
-                console.log("castedvotes", CastedVotes);
+
                 axiosWithAuth()
                     .get()
                     .then((response) => {
                         availableSnackItems = brandSort(response.data);
                         appendSelectionToDom();
-                        
                     })
                     .catch((error) => {
                         console.error(error);
                         showVotingDown();
                     });
-
-
-                
-
             })
             .catch((error) => console.error(error));
     } else {
-        if (availableVotesLeft === 0 || cookieVotes?.length === allowableVotes) {
-            alert("You have voted 3 times already");
-            //open modal with voted message
-            //grab the 3 items and display them in the modal
+        if (
+            availableVotesLeft === 0 ||
+            cookieVotes?.length === allowableVotes
+        ) {
+            displayModal("js-modalLimitReached");
         } else {
-            alert("You have already Cast your Vote For this item");
-            //open modal with already casted vote message for grab item and show it with id
+            displayModal("js-modalPrevSelected");
         }
     }
 };
 
+// Modal for alerts about votes
+const displayModal = (alert) => {
+    let modal = document.getElementById(`${alert}`);
+    console.log("this is alert", alert);
+
+    console.log("this is modal", modal);
+
+    // Get the <span> element that closes the modal
+    let span = document.getElementById(`${alert}-close`);
+
+    modal.style.display = "block";
+
+    span.onclick = function () {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+};
+
+// Cookies to track disable voting after 3 votes
 function setCookie(name, value) {
     let now = new Date();
     let exdays =
@@ -271,8 +274,11 @@ function setCookie(name, value) {
 
     now.setTime(now.getTime() + exdays * 24 * 60 * 60 * 1000);
     now.setHours(23, 59, 59, 0);
-    var expires = "expires=" + now.toGMTString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+
+    let expires = `expires=${now.toGMTString()}`;
+
+    // document.cookie = name + '=' + value + ';' + expires + ';path=/';
+    document.cookie = `${name}=${value};${expires};path=/`;
 }
 
 function daysInMonth(month, year) {
@@ -281,48 +287,40 @@ function daysInMonth(month, year) {
 }
 
 const updateVotes = (id, newVote) => {
-    stringID = id.toString();
+    const changeVote = document.getElementsByClassName(`${id}`);
 
-    console.log("id in updateVotes", id);
-    console.log("newVogte", newVote);
+    const changeVoteArray = Array.from(changeVote);
 
-    const selectedClassArray = [...document.getElementsByClassName(stringID)];
-
-    console.log("array", selectedClassArray);
-
-    selectedClassArray.forEach(function (ele, idx) {
-        console.log("element", ele);
+    changeVoteArray.forEach((ele) => {
         ele.textContent = `${newVote}`;
     });
-    console.log("newvotechange", newVote);
 };
 
 const updateVoteLeftCount = () => {
-    const availableTotal = document.getElementById("available-votes");
-
-    const selectionTalley = document.getElementById("selection-title-count");
+    const availableTotal = document.getElementById("js-available-votes");
+    const selectionTalley = document.getElementById("js-selection-title-count");
 
     if (availableVotesLeft > 0) {
         availableVotesLeft -= 1;
         availableTotal.textContent = `${availableVotesLeft}`;
-
     }
 
-    selectionTalley.textContent = `${Math.abs(availableVotesLeft - allowableVotes)}`;
+    selectionTalley.textContent = `${Math.abs(
+        availableVotesLeft - allowableVotes
+    )}`;
 };
 const showVotingDown = () => {
-    let sysdown = document.getElementById("down");
+    let sysdown = document.getElementById("js-stockedSection-content-down");
 
     // remove snackvoting if system is down
-    const votingBody = document.getElementById("voting-bd");
-    
-    votingBody.remove()
-   
-    // remove currently in stock text
-    const stockText = document.getElementById("stockText");
-    stockText.remove()
+    const votingBody = document.getElementById("js-votingSection");
+    votingBody.remove();
 
-    sysdown.classList.add("display-down-message");
+    // remove currently in stock text
+    const stockedText = document.getElementById("js-stockedSection-content-hd");
+    stockedText.remove();
+
+    sysdown.classList.add("stockedSection-content-down-copy");
 };
 
 const axiosWithAuth = () => {
@@ -344,6 +342,7 @@ const brandSort = (snacks) => {
         }
         return 0;
     });
+
     return brandSorted;
 };
 
@@ -357,26 +356,27 @@ const voteSort = (snacks) => {
         }
         return 0;
     });
-
     return voteSorted;
 };
 
-const onSucessLoad = (snacks) => {
-    let sysdown = document.getElementById("down");
-    sysdown.classList.remove("display-down-message");
+const onSucessLoad = async (snacks) => {
+    let sysdown = document.getElementById("js-stockedSection-content-down");
+    sysdown.classList.remove("stockedSection-content-down-copy");
 
     appendSnacksToDOM(voteSort(snacks));
     appendVotingToDOM(voteSort(snacks));
     appendSelectionToDom(brandSort(snacks));
 
-    const availableTotal = document.getElementById("available-votes");
+    const availableTotal = document.getElementById("js-available-votes");
+    const totalItems = document.getElementById("js-available-items-title-count");
+    const selectionTalley = document.getElementById("js-selection-title-count");
+    
     availableTotal.textContent = `${availableVotesLeft}`;
-
-    const totalItems = document.getElementById("available-items-title-count");
     totalItems.textContent = `${snacks.length}`;
+    selectionTalley.textContent = `${Math.abs(
+        availableVotesLeft - allowableVotes
+    )}`;
 
-    const selectionTalley = document.getElementById("selection-title-count");
-    selectionTalley.textContent = `${Math.abs(availableVotesLeft - allowableVotes)}`;
 
 };
 
@@ -384,9 +384,7 @@ const getSnacks = () => {
     axiosWithAuth()
         .get()
         .then((response) => {
-            availableSnackItems = brandSort(response.data);
-
-            // append to DOM on Start
+            availableSnackItems = response.data;
             onSucessLoad(availableSnackItems);
         })
         .catch((error) => {

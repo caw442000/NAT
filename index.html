@@ -111,14 +111,14 @@
                         </svg>
                     </a>
                     <nav class="hList">
-                        <a class="navLink" href="#">Home</a>
-                        <a class="navLink" href="#">Current</a>
-                        <a class="navLink" href="#">Voting</a>
-                        <a class="navLink" href="#">Sign Up</a>
+                        <a class="navLink" href="#site-bd">Home</a>
+                        <a class="navLink" href="#stockedSection">Current</a>
+                        <a class="navLink" href="#votingSection">Voting</a>
+                        <a class="navLink" href="#signUp">Sign Up</a>
                     </nav>
                 </div>
             </header>
-            <div class="site-bd">
+            <div id="site-bd" class="site-bd">
                 <div class="site-bd-section">
                     <div class="heroBanner">
                         <div class="heroBanner-content u-constrainer">
@@ -143,216 +143,276 @@
                         </div>
                     </div>
                 </div>
-                <div class="stockedBanner">
-                    <div id="stockText" class="stockText u-constrainer">
-                        <h1 class="hdg hdg_2">Currently In Stock</h1>
-                        <p class="copy stockedCopy">
-                            Here are the snacks that are available in the
-                            Nerdery kitchen now.
-                        </p>
-                    </div>
-                    <div id="down" class="currently-down">
-                        <h2 class="hdg hdg_2">
-                            We are sorry however currently in stock is not able
-                            to be displayed
-                        </h2>
-                    </div>
-                    <div class="cards"></div>
-                </div>
-            </div>
-            <div id="voting-bd" class="voting-bd">
-                <div class="votingText">
-                    <h2 class="hdg hdg_2 mix-hdg_dark">Snack Voting</h2>
-                    <p class="copy votingCopy">
-                        Vote on the snacks you want to see in this month's
-                        rotation
-                    </p>
-                    <p class="copy votingCopy voting-remaining hdg_4">
-                        <span id= "available-votes" class="available-votes"></span> Votes Remaining
-                    </p>
-                </div>
-                <div class="voting-section">
-                    <div class="available-items">
-                        <div class="available-items-title">
-                            <h3 class="hdg hdg_3">Available Items</h3>
-                            <p id="available-items-title-count" class="available-items-title-count hdg_5"></p>
+                <div id="stockedSection" class="stockedSection">
+                    <div
+                        id="stockedSection-content"
+                        class="stockedSection-content"
+                    >
+                        <div
+                            id="js-stockedSection-content-hd"
+                            class="stockedSection-content-hd"
+                        >
+                            <h1 class="hdg hdg_2">Currently In Stock</h1>
+                            <p class="copy stockedSection-content-hd-copy">
+                                Here are the snacks that are available in the
+                                Nerdery kitchen now.
+                            </p>
                         </div>
-                        <div class="available-items-list"></div>
-                    </div>
-                    <div class="selection">
-                        <div class="selection-title">
-                            <h3 class="hdg hdg_3 mix-hdg_dark">Selection</h3>
-                            <p id = "selection-title-count"class="selection-title-count hdg hdg_5"></p>
+                        <div
+                            id="js-stockedSection-content-down"
+                            class="stockedSection-content-down"
+                        >
+                            <h2 class="hdg hdg_2">
+                                We are sorry however currently in stock is not
+                                able to be displayed
+                            </h2>
                         </div>
-                        <div id= "selected-items-list" class="selected-items-list"></div>
+                        <div class="stockedSection-content-bd"></div>
                     </div>
                 </div>
-            </div>
-            <div class="site-bd-section site-bd-section_gray">
-                <div class="u-constrainer">
-                    <div class="layoutPanel">
-                        <div class="layoutPanel-hd">
-                            <div class="layoutPanel-hd-title">
-                                <h2 class="hdg hdg_2 mix-hdg_dark">
-                                    Sign up for Snafoo updates!
-                                </h2>
+
+                <div id="js-votingSection" class="votingSection">
+                    <div class="votingSection-content">
+                        <div class="votingSection-content-hd">
+                            <h2 class="hdg hdg_2 mix-hdg_dark">Snack Voting</h2>
+                            <p class="copy votingCopy">
+                                Vote on the snacks you want to see in this
+                                month's rotation
+                            </p>
+                            <p class="copy votingCopy voting-remaining hdg_4">
+                                <span
+                                    id="js-available-votes"
+                                    class="available-votes"
+                                ></span>
+                                Votes Remaining
+                            </p>
+                        </div>
+                        <div class="votingSection-content-bd">
+                            <div class="available-items">
+                                <div class="available-items-title">
+                                    <h3 class="hdg hdg_3">Available Items</h3>
+                                    <p
+                                        id="js-available-items-title-count"
+                                        class="available-items-title-count hdg_5"
+                                    ></p>
+                                </div>
+                                <div class="available-items-list"></div>
+                                <div
+                                    id="js-modalPrevSelected"
+                                    class="modalPrevSelected"
+                                >
+                                    <div class="modal-content">
+                                        <span
+                                            id="js-modalPrevSelected-close"
+                                            class="close"
+                                            >&times;</span
+                                        >
+                                        <p>
+                                            You have already Cast your vote For
+                                            this item
+                                        </p>
+                                    </div>
+                                </div>
+                                <div
+                                    id="js-modalLimitReached"
+                                    class="modalLimitReached"
+                                >
+                                    <div class="modal-content">
+                                        <span
+                                            id="js-modalLimitReached-close"
+                                            class="close"
+                                            >&times;</span
+                                        >
+                                        <p>You have voted 3 times already</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="selection">
+                                <div class="selection-title">
+                                    <h3
+                                        class="hdg hdg_3 selection-title-text mix-hdg_dark"
+                                    >
+                                        Selection
+                                    </h3>
+                                    <p
+                                        id="js-selection-title-count"
+                                        class="selection-title-count hdg hdg_5"
+                                    ></p>
+                                </div>
+                                <div
+                                    id="js-selected-items-list"
+                                    class="selected-items-list"
+                                ></div>
                             </div>
                         </div>
-                        <div class="layoutPanel-bd">
-                            <div class="grid">
-                                <div class="grid-col grid-col_2of3">
-                                    <form class="inputForm">
-                                        <div
-                                            class="inputForm-item inputForm-item_half"
-                                        >
-                                            <label
-                                                class="u-isVisuallyHidden"
-                                                for="form-firstname"
-                                                >Fist Name</label
-                                            >
-                                            <input
-                                                class="inputForm-text"
-                                                type="text"
-                                                name=""
-                                                placeholder="Fist Name"
-                                            />
-                                        </div>
-                                        <div
-                                            class="inputForm-item inputForm-item_half"
-                                        >
-                                            <label
-                                                class="u-isVisuallyHidden"
-                                                for="form-lastname"
-                                                >Last Name</label
-                                            >
-                                            <input
-                                                class="inputForm-text"
-                                                type="text"
-                                                name=""
-                                                placeholder="Last Name"
-                                            />
-                                        </div>
-                                        <div
-                                            class="inputForm-item inputForm-item_half"
-                                        >
-                                            <label
-                                                class="u-isVisuallyHidden"
-                                                for="form-email"
-                                                >Email</label
-                                            >
-                                            <input
-                                                class="inputForm-text"
-                                                type="text"
-                                                name=""
-                                                placeholder="Email"
-                                            />
-                                        </div>
-                                        <div
-                                            class="inputForm-item inputForm-item_half"
-                                        >
-                                            <label
-                                                class="u-isVisuallyHidden"
-                                                for="form-phonenumber"
-                                                >Phone Number</label
-                                            >
-                                            <input
-                                                class="inputForm-text"
-                                                type="text"
-                                                name=""
-                                                placeholder="Phone Number"
-                                            />
-                                        </div>
-                                        <div class="inputForm-item">
-                                            <label
-                                                class="u-isVisuallyHidden"
-                                                for="form-message"
-                                                >Message</label
-                                            >
-                                            <textarea
-                                                class="inputForm-area"
-                                                placeholder="Message"
-                                            ></textarea>
-                                        </div>
-                                        <div class="inputForm-item">
-                                            <div
-                                                class="inputForm-item-checkGroup"
-                                            >
-                                                <input
-                                                    id="form-employee"
-                                                    class="u-isVisuallyHidden"
-                                                    type="checkbox"
-                                                />
-                                                <label for="form-employee"
-                                                    >I am a Nerdery
-                                                    employee</label
-                                                >
-                                            </div>
-                                            <div
-                                                class="inputForm-item-checkGroup"
-                                            >
-                                                <input
-                                                    id="form-notify"
-                                                    class="u-isVisuallyHidden"
-                                                    type="checkbox"
-                                                />
-                                                <label for="form-notify"
-                                                    >Notify Me for Special
-                                                    Offers!</label
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="inputForm-item">
-                                            <input
-                                                class="btn btn_dark"
-                                                type="submit"
-                                                value="Sign Up"
-                                            />
-                                        </div>
-                                    </form>
+                    </div>
+                </div>
+                <div id="signUp" class="site-bd-section site-bd-section_gray">
+                    <div class="u-constrainer">
+                        <div class="layoutPanel">
+                            <div class="layoutPanel-hd">
+                                <div class="layoutPanel-hd-title">
+                                    <h2 class="hdg hdg_2 mix-hdg_dark">
+                                        Sign up for Snafoo updates!
+                                    </h2>
                                 </div>
-                                <div class="grid-col grid-col_1of3">
-                                    <div class="media u-vr_x4">
-                                        <div class="media-figure">
-                                            <svg class="icon">
-                                                <use
-                                                    xlink:href="#icon-email"
-                                                ></use>
-                                            </svg>
-                                        </div>
-                                        <div class="media-bd">
-                                            <span class="assideText"
-                                                >info@nerdery.com</span
+                            </div>
+                            <div class="layoutPanel-bd">
+                                <div class="grid">
+                                    <div class="grid-col grid-col_2of3">
+                                        <form class="inputForm">
+                                            <div
+                                                class="inputForm-item inputForm-item_half"
                                             >
-                                        </div>
-                                    </div>
-                                    <div class="media u-vr_x4">
-                                        <div class="media-figure">
-                                            <svg class="icon">
-                                                <use
-                                                    xlink:href="#icon-fax"
-                                                ></use>
-                                            </svg>
-                                        </div>
-                                        <div class="media-bd">
-                                            <span class="assideText"
-                                                >(877) 664.6373</span
+                                                <label
+                                                    class="u-isVisuallyHidden"
+                                                    for="form-firstname"
+                                                    >Fist Name</label
+                                                >
+                                                <input
+                                                    class="inputForm-text"
+                                                    type="text"
+                                                    name=""
+                                                    placeholder="Fist Name"
+                                                />
+                                            </div>
+                                            <div
+                                                class="inputForm-item inputForm-item_half"
                                             >
-                                        </div>
+                                                <label
+                                                    class="u-isVisuallyHidden"
+                                                    for="form-lastname"
+                                                    >Last Name</label
+                                                >
+                                                <input
+                                                    class="inputForm-text"
+                                                    type="text"
+                                                    name=""
+                                                    placeholder="Last Name"
+                                                />
+                                            </div>
+                                            <div
+                                                class="inputForm-item inputForm-item_half"
+                                            >
+                                                <label
+                                                    class="u-isVisuallyHidden"
+                                                    for="form-email"
+                                                    >Email</label
+                                                >
+                                                <input
+                                                    class="inputForm-text"
+                                                    type="text"
+                                                    name=""
+                                                    placeholder="Email"
+                                                />
+                                            </div>
+                                            <div
+                                                class="inputForm-item inputForm-item_half"
+                                            >
+                                                <label
+                                                    class="u-isVisuallyHidden"
+                                                    for="form-phonenumber"
+                                                    >Phone Number</label
+                                                >
+                                                <input
+                                                    class="inputForm-text"
+                                                    type="text"
+                                                    name=""
+                                                    placeholder="Phone Number"
+                                                />
+                                            </div>
+                                            <div class="inputForm-item">
+                                                <label
+                                                    class="u-isVisuallyHidden"
+                                                    for="form-message"
+                                                    >Message</label
+                                                >
+                                                <textarea
+                                                    class="inputForm-area"
+                                                    placeholder="Message"
+                                                ></textarea>
+                                            </div>
+                                            <div class="inputForm-item">
+                                                <div
+                                                    class="inputForm-item-checkGroup"
+                                                >
+                                                    <input
+                                                        id="form-employee"
+                                                        class="u-isVisuallyHidden"
+                                                        type="checkbox"
+                                                    />
+                                                    <label for="form-employee"
+                                                        >I am a Nerdery
+                                                        employee</label
+                                                    >
+                                                </div>
+                                                <div
+                                                    class="inputForm-item-checkGroup"
+                                                >
+                                                    <input
+                                                        id="form-notify"
+                                                        class="u-isVisuallyHidden"
+                                                        type="checkbox"
+                                                    />
+                                                    <label for="form-notify"
+                                                        >Notify Me for Special
+                                                        Offers!</label
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="inputForm-item">
+                                                <input
+                                                    class="btn btn_dark"
+                                                    type="submit"
+                                                    value="Sign Up"
+                                                />
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="media u-vr_x4">
-                                        <div class="media-figure">
-                                            <svg class="icon">
-                                                <use
-                                                    xlink:href="#icon-locate"
-                                                ></use>
-                                            </svg>
+                                    <div class="grid-col grid-col_1of3">
+                                        <div class="media u-vr_x4">
+                                            <div class="media-figure">
+                                                <svg class="icon">
+                                                    <use
+                                                        xlink:href="#icon-email"
+                                                    ></use>
+                                                </svg>
+                                            </div>
+                                            <div class="media-bd">
+                                                <span class="assideText"
+                                                    >info@nerdery.com</span
+                                                >
+                                            </div>
                                         </div>
-                                        <div class="media-bd">
-                                            <span class="assideText">
-                                                The Nerdery Snafoo Team
-                                                <br />9555 James Ave. S.
-                                                <br />Bloomington MN, 55431
-                                            </span>
+                                        <div class="media u-vr_x4">
+                                            <div class="media-figure">
+                                                <svg class="icon">
+                                                    <use
+                                                        xlink:href="#icon-fax"
+                                                    ></use>
+                                                </svg>
+                                            </div>
+                                            <div class="media-bd">
+                                                <span class="assideText"
+                                                    >(877) 664.6373</span
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="media u-vr_x4">
+                                            <div class="media-figure">
+                                                <svg class="icon">
+                                                    <use
+                                                        xlink:href="#icon-locate"
+                                                    ></use>
+                                                </svg>
+                                            </div>
+                                            <div class="media-bd">
+                                                <span class="assideText">
+                                                    The Nerdery Snafoo Team
+                                                    <br />9555 James Ave. S.
+                                                    <br />Bloomington MN, 55431
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

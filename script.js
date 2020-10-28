@@ -1,6 +1,5 @@
 // Declare Global
-const CastedVotes = getCookie("votes")?.split(",") ||
-    [];
+const CastedVotes = getCookie("votes")?.split(",") || [];
 let allowableVotes = 3;
 let availableVotesLeft = allowableVotes - CastedVotes.length;
 let availableSnackItems = [];
@@ -90,12 +89,8 @@ const createAvailableItemDiv = (snack, index) => {
     const plusHolder = document.createElement("div");
     const plusSVG = CreatePlusSVG();
 
-    plusHolder.appendChild(plusSVG);
-
     const itemContent = document.createElement("div");
     const itemText = document.createElement("h4");
-    itemText.classList = "item-content-text mix-hdg_dark";
-
     const itemVotes = document.createElement("p");
 
     if ((index + 1) % 2 === 0) {
@@ -107,6 +102,7 @@ const createAvailableItemDiv = (snack, index) => {
         plusHolder.classList = "plus-even";
         itemContent.classList = "item-content-even";
     }
+    itemText.classList = "item-content-text mix-hdg_dark";
     itemVotes.classList = `item-content-votes mix-hdg_dark ${voteID}`;
 
     let nodeItemVotes = document.createTextNode(snack.votes);
@@ -114,6 +110,7 @@ const createAvailableItemDiv = (snack, index) => {
         `${snack.brand} ${snack.product}`
     );
 
+    plusHolder.appendChild(plusSVG);
     itemText.appendChild(nodeItemText);
     itemVotes.appendChild(nodeItemVotes);
     itemContent.appendChild(itemText);
@@ -126,20 +123,22 @@ const createAvailableItemDiv = (snack, index) => {
 
 const createSelectedItemDiv = (snack) => {
     const voteID = `${snack.brand}${snack.id}`;
+
     const selectedItem = document.createElement("div");
     selectedItem.setAttribute("id", snack.id);
-    selectedItem.classList = "selected-item";
-
+    
     const selectedItemText = document.createElement("h4");
-    selectedItemText.classList = "selected-item-text hdg mix-hdg_dark";
     const selectedItemVotes = document.createElement("p");
+    
+    selectedItemText.classList = "selected-item-text hdg mix-hdg_dark";
     selectedItemVotes.classList = `selected-item-votes hdg hdg_5 mix-hdg_dark ${voteID}`;
-
+    selectedItem.classList = "selected-item";
+    
     let nodeSelectedVotes = document.createTextNode(snack.votes);
     let nodeSelectedText = document.createTextNode(
-        `${snack.brand} ${snack.product}`
-    );
-
+      `${snack.brand} ${snack.product}`
+      );
+      
     selectedItemText.appendChild(nodeSelectedText);
     selectedItemVotes.appendChild(nodeSelectedVotes);
     selectedItem.appendChild(selectedItemText);
@@ -174,7 +173,7 @@ const removeAllChildNodes = (parent) => {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
-}
+};
 const appendSelectionToDom = async (snacks) => {
     let selectedItemsList = document.getElementById("js-selected-items-list");
 
@@ -183,7 +182,6 @@ const appendSelectionToDom = async (snacks) => {
     const filteredSnacks = snacks.filter((snack) =>
         CastedVotes.includes(snack.id)
     );
-
 
     filteredSnacks.map((snack) => {
         selectedItemsList.appendChild(createSelectedItemDiv(snack));
@@ -194,7 +192,7 @@ const appendSelectionToDom = async (snacks) => {
 const daysInMonth = (month, year) => {
     // Use 1 for January, 2 for February, etc.
     return new Date(year, month, 0).getDate();
-}
+};
 
 // Cookies to track disable voting after 3 votes
 function setCookie(name, value) {
@@ -210,20 +208,20 @@ function setCookie(name, value) {
     document.cookie = `${name}=${value};${expires};path=/`;
 }
 
-function getCookie(name){
+//gets cookie
+function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
+//decides if vote should be cast and casts it
 const castVote = (id) => {
-   
     let cookieVotes = [];
 
     if (getCookie("votes")) {
         cookieVotes = getCookie("votes")?.split(",");
     }
-
     if (
         !CastedVotes.includes(`${id}`) &&
         availableVotesLeft > 0 &&
@@ -236,24 +234,23 @@ const castVote = (id) => {
                 CastedVotes.push(res.data.id);
                 setCookie("votes", CastedVotes);
 
-                getSnacks()
+                getSnacks();
             })
             .catch((error) => {
-              console.error(error);
-              displayModal("js-modalError");
-          });
+                console.error(error);
+                displayModal("js-modalError");
+            });
     } else {
         if (
             availableVotesLeft === 0 ||
             cookieVotes?.length === allowableVotes
         ) {
             displayModal("js-modalLimitReached");
-          } else {
+        } else {
             displayModal("js-modalPrevSelected");
-          }
         }
-      };
-      
+    }
+};
 
 //updates Vote count for remaining and in selection title header
 const updateVoteLeftCount = () => {
@@ -269,8 +266,6 @@ const updateVoteLeftCount = () => {
         availableVotesLeft - allowableVotes
     )}`;
 };
-
-
 
 // displays Voting down message if API call errors
 const showVotingDown = () => {
@@ -289,22 +284,22 @@ const showVotingDown = () => {
 
 // Modal for alerts about votes
 const displayModal = (alert) => {
-  let modal = document.getElementById(`${alert}`);
+    let modal = document.getElementById(`${alert}`);
 
-  // Get the <span> element that closes the modal
-  let span = document.getElementById(`${alert}-close`);
+    // Get the <span> element that closes the modal
+    let span = document.getElementById(`${alert}-close`);
 
-  modal.style.display = "block";
+    modal.style.display = "block";
 
-  span.onclick = () => {
-      modal.style.display = "none";
-  };
+    span.onclick = () => {
+        modal.style.display = "none";
+    };
 
-  window.onclick = (event) => {
-      if (event.target === modal) {
-          modal.style.display = "none";
-      }
-  };
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
 };
 
 // API Authorization
@@ -316,7 +311,6 @@ const axiosWithAuth = () => {
         },
     });
 };
-
 
 // Sort by brand for Selection
 const brandSort = (snacks) => {
@@ -353,32 +347,34 @@ const onSucessLoad = async (snacks) => {
 
     const inStock = document.getElementById("js-stockedSection-content-bd");
 
-    const availableItemsList = document.getElementById("js-available-items-list");
+    const availableItemsList = document.getElementById(
+        "js-available-items-list"
+    );
 
-    await removeAllChildNodes(inStock)
-    await removeAllChildNodes(availableItemsList)
+    await removeAllChildNodes(inStock);
+    await removeAllChildNodes(availableItemsList);
 
-    const selectionBrandSort = brandSort(snacks)
-    const availableVoteSort = (voteSort(snacks))
-
+    const selectionBrandSort = brandSort(snacks);
+    const availableVoteSort = voteSort(snacks);
 
     appendSnacksToDOM(availableVoteSort);
     appendVotingToDOM(availableVoteSort);
     appendSelectionToDom(selectionBrandSort);
 
     const availableTotal = document.getElementById("js-available-votes");
-    const totalItems = document.getElementById("js-available-items-title-count");
+    const totalItems = document.getElementById(
+        "js-available-items-title-count"
+    );
     const selectionTalley = document.getElementById("js-selection-title-count");
-    
+
     availableTotal.textContent = `${availableVotesLeft}`;
     totalItems.textContent = `${snacks.length}`;
     selectionTalley.textContent = `${Math.abs(
         availableVotesLeft - allowableVotes
     )}`;
-
-
 };
 
+// Gets snack data from API
 const getSnacks = () => {
     axiosWithAuth()
         .get()

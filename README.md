@@ -4,7 +4,9 @@ https://nattest.vercel.app
 
 ## Issues
 
-svg asset was not importing so I used JS to rebuild it dynamically
+svg asset was not importing so I used JS to rebuild it dynamically.
+
+Due to length of string for product I had to shorten the text.
 
 ## How to Test
 

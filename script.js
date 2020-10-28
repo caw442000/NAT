@@ -175,14 +175,15 @@ const removeAllChildNodes = (parent) => {
         parent.removeChild(parent.firstChild);
     }
 }
-const appendSelectionToDom = async () => {
+const appendSelectionToDom = async (snacks) => {
     let selectedItemsList = document.getElementById("js-selected-items-list");
 
     await removeAllChildNodes(selectedItemsList);
 
-    const filteredSnacks = availableSnackItems.filter((snack) =>
+    const filteredSnacks = snacks.filter((snack) =>
         CastedVotes.includes(snack.id)
     );
+
 
     filteredSnacks.map((snack) => {
         selectedItemsList.appendChild(createSelectedItemDiv(snack));
@@ -319,7 +320,7 @@ const axiosWithAuth = () => {
 
 // Sort by brand for Selection
 const brandSort = (snacks) => {
-    let brandSorted = snacks.slice().sort((a, b) => {
+    const brandSorted = snacks.slice().sort((a, b) => {
         if (a.brand < b.brand) {
             return -1;
         }
@@ -347,20 +348,23 @@ const voteSort = (snacks) => {
 };
 
 const onSucessLoad = async (snacks) => {
-    let sysdown = document.getElementById("js-stockedSection-content-down");
+    const sysdown = document.getElementById("js-stockedSection-content-down");
     sysdown.classList.remove("stockedSection-content-down-copy");
 
     const inStock = document.getElementById("js-stockedSection-content-bd");
 
-    let availableItemsList = document.getElementById("js-available-items-list");
+    const availableItemsList = document.getElementById("js-available-items-list");
 
     await removeAllChildNodes(inStock)
     await removeAllChildNodes(availableItemsList)
 
+    const selectionBrandSort = brandSort(snacks)
+    const availableVoteSort = (voteSort(snacks))
 
-    appendSnacksToDOM(voteSort(snacks));
-    appendVotingToDOM(voteSort(snacks));
-    appendSelectionToDom(brandSort(snacks));
+
+    appendSnacksToDOM(availableVoteSort);
+    appendVotingToDOM(availableVoteSort);
+    appendSelectionToDom(selectionBrandSort);
 
     const availableTotal = document.getElementById("js-available-votes");
     const totalItems = document.getElementById("js-available-items-title-count");
